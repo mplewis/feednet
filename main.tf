@@ -16,9 +16,10 @@ provider "digitalocean" {
 }
 
 resource "digitalocean_kubernetes_cluster" "feednet" {
-  name    = "feednet"
-  region  = "sfo3"
-  version = "1.19.3-do.0"
+  name         = "feednet"
+  region       = "sfo3"
+  version      = data.digitalocean_kubernetes_versions.example.latest_version
+  auto_upgrade = true
 
   node_pool {
     name       = "default"
