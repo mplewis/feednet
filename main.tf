@@ -90,7 +90,7 @@ resource "kubernetes_service" "nginx" {
   spec {
     type = "LoadBalancer"
     selector = {
-      app = kubernetes_deployment.nginx.labels.app
+      app = "nginx"
     }
     port {
       port = 80
