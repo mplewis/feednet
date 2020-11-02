@@ -39,7 +39,7 @@ provider "kubernetes" {
   )
 }
 
-resource "kubernetes_deployment" "example" {
+resource "kubernetes_deployment" "nginx" {
   metadata {
     name = "nginx"
     labels = {
