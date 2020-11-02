@@ -15,9 +15,25 @@ provider "digitalocean" {
   token = var.digitalocean_token
 }
 
-resource "digitalocean_droplet" "web" {
-  image  = "ubuntu-18-04-x64"
-  name   = "web-1"
-  region = "sfo3"
-  size   = "s-1vcpu-1gb"
+resource "digitalocean_kubernetes_cluster" "feednet" {
+  name    = "feednet"
+  region  = "sfo3"
+  version = "1.19.3-do.0"
+
+  node_pool {
+    name       = "default"
+    size       = "s-1vcpu-2gb"
+    auto_scale = true
+    min_nodes  = 3
+    max_nodes  = 10
+  }
+}
+
+provider "kubernetes" {
+  load_config_file = false
+  host             = digitalocean_kubernetes_cluster.feednet.endpoint
+  token            = digitalocean_kubernetes_cluster.feednet.kube_config[0].token
+  cluster_ca_certificate = base64decode(
+    digitalocean_kubernetes_cluster.feednet.kube_config[0].cluster_ca_certificate
+  )
 }
