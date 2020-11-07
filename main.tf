@@ -43,6 +43,17 @@ provider "kubernetes" {
   )
 }
 
+provider "helm" {
+  kubernetes {
+    load_config_file = false
+    host             = digitalocean_kubernetes_cluster.feednet.endpoint
+    token            = digitalocean_kubernetes_cluster.feednet.kube_config[0].token
+    cluster_ca_certificate = base64decode(
+      digitalocean_kubernetes_cluster.feednet.kube_config[0].cluster_ca_certificate
+    )
+  }
+}
+
 resource "kubernetes_service" "inbound" {
   metadata {
     name = "inbound"
@@ -57,16 +68,6 @@ resource "kubernetes_service" "inbound" {
       name = "https"
       port = 443
     }
-  }
-}
-
-provider "helm" {
-  kubernetes {
-    host  = digitalocean_kubernetes_cluster.feednet.endpoint
-    token = digitalocean_kubernetes_cluster.feednet.kube_config[0].token
-    cluster_ca_certificate = base64decode(
-      digitalocean_kubernetes_cluster.feednet.kube_config[0].cluster_ca_certificate
-    )
   }
 }
 
