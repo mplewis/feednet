@@ -15,6 +15,11 @@ provider "digitalocean" {
   token = var.digitalocean_token
 }
 
+resource "digitalocean_container_registry" "chiba" {
+  name                   = "chiba"
+  subscription_tier_slug = "starter"
+}
+
 resource "digitalocean_kubernetes_cluster" "feednet" {
   name    = "feednet"
   region  = "sfo3"
@@ -36,6 +41,39 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(
     digitalocean_kubernetes_cluster.feednet.kube_config[0].cluster_ca_certificate
   )
+}
+
+resource "kubernetes_service" "inbound" {
+  metadata {
+    name = "inbound"
+  }
+  spec {
+    type = "LoadBalancer"
+  }
+}
+
+provider "helm" {
+  kubernetes {
+    host  = digitalocean_kubernetes_cluster.feednet.endpoint
+    token = digitalocean_kubernetes_cluster.feednet.kube_config[0].token
+    cluster_ca_certificate = base64decode(
+      digitalocean_kubernetes_cluster.feednet.kube_config[0].cluster_ca_certificate
+    )
+  }
+}
+
+resource "helm_release" "traefik" {
+  name       = "traefik"
+  repository = "https://kubernetes-charts.storage.googleapis.com/"
+  chart      = "traefik"
+  version    = "1.78.4"
+
+  values = [file("helm/traefik.yaml")]
+  set {
+    type  = "string"
+    name  = "loadBalancerIP"
+    value = kubernetes_service.inbound.load_balancer_ingress[0].ip
+  }
 }
 
 resource "kubernetes_deployment" "nginx" {

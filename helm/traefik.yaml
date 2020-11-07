@@ -1,0 +1,9 @@
+replicas: 3
+rbac:
+  enabled: true
+ssl:
+  enabled: true
+kubernetes:
+  ingressEndpoint:
+    # https://github.com/kubernetes-sigs/external-dns/blob/master/docs/faq.md#which-service-and-ingress-controllers-are-supported
+    useDefaultPublishedService: true
