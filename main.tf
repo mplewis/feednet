@@ -15,11 +15,6 @@ provider "digitalocean" {
   token = var.digitalocean_token
 }
 
-resource "digitalocean_container_registry" "chiba" {
-  name                   = "chiba"
-  subscription_tier_slug = "starter"
-}
-
 resource "digitalocean_kubernetes_cluster" "feednet" {
   name    = "feednet"
   region  = "sfo3"
