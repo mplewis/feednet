@@ -122,9 +122,9 @@ resource "kubernetes_deployment" "podinfo" {
   }
 }
 
-resource "kubernetes_service" "podinfo_lb" {
+resource "kubernetes_service" "podinfo-lb" {
   metadata {
-    name = "podinfo_lb"
+    name = "podinfo-lb"
   }
   spec {
     type = "LoadBalancer"
