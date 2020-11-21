@@ -62,6 +62,12 @@ resource "helm_release" "traefik" {
   values     = [file("helm/traefik.yaml")]
 }
 
+resource "kubernetes_secret" "digitalocean-api-key" {
+  metadata {
+    name = "digitalocean-api-key"
+  }
+}
+
 resource "kubernetes_deployment" "podinfo" {
   metadata {
     name = "podinfo"
