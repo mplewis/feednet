@@ -60,6 +60,14 @@ resource "kubernetes_service" "inbound" {
   }
   spec {
     type = "LoadBalancer"
+    port {
+      name = "http"
+      port = 80
+    }
+    port {
+      name = "https"
+      port = 443
+    }
   }
 }
 
