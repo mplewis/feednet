@@ -62,52 +62,6 @@ resource "helm_release" "traefik" {
   values     = [file("helm/traefik.yaml")]
 }
 
-resource "kubernetes_deployment" "external-dns" {
-  metadata {
-    name = "external-dns"
-  }
-
-  spec {
-    replicas = 1
-
-    selector {
-      match_labels = {
-        app = "external-dns"
-      }
-    }
-
-    template {
-      metadata {
-        labels = {
-          app = "external-dns"
-        }
-      }
-
-      spec {
-        container {
-          image = "k8s.gcr.io/external-dns/external-dns:v0.7.3"
-          name  = "external-dns"
-          args = [
-            "--provider=digitalocean",
-            "--source=ingress",
-            "--registry=txt",
-            "--txt-owner-id=k8s",
-          ]
-          env {
-            name = "DO_TOKEN"
-            value_from {
-              secret_key_ref {
-                name = "digitalocean-api-key"
-                key  = "api-key"
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
 resource "kubernetes_deployment" "podinfo" {
   metadata {
     name = "podinfo"
