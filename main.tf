@@ -104,6 +104,7 @@ resource "kubernetes_service" "podinfo" {
     name = "podinfo"
   }
   spec {
+    type = "LoadBalancer"
     selector = {
       app = "podinfo"
     }
