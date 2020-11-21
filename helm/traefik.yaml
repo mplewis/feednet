@@ -3,6 +3,8 @@ rbac:
   enabled: true
 ssl:
   enabled: true
+providers:
+  kubernetesIngress: {}
 kubernetes:
   ingressEndpoint:
     # https://github.com/kubernetes-sigs/external-dns/blob/master/docs/faq.md#which-service-and-ingress-controllers-are-supported
