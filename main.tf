@@ -124,18 +124,3 @@ resource "kubernetes_deployment" "nginx" {
     }
   }
 }
-
-resource "kubernetes_service" "nginx" {
-  metadata {
-    name = "nginx"
-  }
-  spec {
-    type = "LoadBalancer"
-    selector = {
-      app = "nginx"
-    }
-    port {
-      port = 80
-    }
-  }
-}
