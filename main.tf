@@ -59,8 +59,7 @@ resource "helm_release" "traefik" {
   repository = "https://kubernetes-charts.storage.googleapis.com/"
   chart      = "traefik"
   version    = "1.78.4"
-
-  values = [file("helm/traefik.yaml")]
+  values     = [file("helm/traefik.yaml")]
 }
 
 resource "kubernetes_deployment" "podinfo" {
