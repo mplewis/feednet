@@ -99,9 +99,9 @@ resource "kubernetes_deployment" "podinfo" {
   }
 }
 
-resource "kubernetes_service" "podinfo" {
+resource "kubernetes_service" "podinfo_lb" {
   metadata {
-    name = "podinfo"
+    name = "podinfo_lb"
   }
   spec {
     type = "LoadBalancer"
@@ -109,7 +109,8 @@ resource "kubernetes_service" "podinfo" {
       app = "podinfo"
     }
     port {
-      port = 9898
+      port        = 80
+      target_port = 9898
     }
   }
 }
