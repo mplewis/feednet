@@ -108,21 +108,6 @@ resource "kubernetes_deployment" "podinfo" {
   }
 }
 
-resource "kubernetes_service" "podinfo" {
-  metadata {
-    name = "podinfo"
-  }
-  spec {
-    selector = {
-      app = "podinfo"
-    }
-    port {
-      port        = 80
-      target_port = 9898
-    }
-  }
-}
-
 resource "kubernetes_ingress" "podinfo" {
   metadata {
     name = "podinfo"
