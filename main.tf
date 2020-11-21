@@ -54,23 +54,6 @@ provider "helm" {
   }
 }
 
-resource "kubernetes_service" "inbound" {
-  metadata {
-    name = "inbound"
-  }
-  spec {
-    type = "LoadBalancer"
-    port {
-      name = "http"
-      port = 80
-    }
-    port {
-      name = "https"
-      port = 443
-    }
-  }
-}
-
 resource "helm_release" "traefik" {
   name       = "traefik"
   repository = "https://kubernetes-charts.storage.googleapis.com/"
@@ -78,11 +61,6 @@ resource "helm_release" "traefik" {
   version    = "1.78.4"
 
   values = [file("helm/traefik.yaml")]
-  set {
-    type  = "string"
-    name  = "loadBalancerIP"
-    value = kubernetes_service.inbound.load_balancer_ingress[0].ip
-  }
 }
 
 resource "kubernetes_deployment" "podinfo" {
@@ -130,28 +108,11 @@ resource "kubernetes_deployment" "podinfo" {
   }
 }
 
-resource "kubernetes_service" "podinfo-lb" {
-  metadata {
-    name = "podinfo-lb"
-  }
-  spec {
-    type = "LoadBalancer"
-    selector = {
-      app = "podinfo"
-    }
-    port {
-      port        = 80
-      target_port = 9898
-    }
-  }
-}
-
 resource "kubernetes_service" "podinfo" {
   metadata {
     name = "podinfo"
   }
   spec {
-    type = "LoadBalancer"
     selector = {
       app = "podinfo"
     }
