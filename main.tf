@@ -113,7 +113,6 @@ resource "kubernetes_service" "podinfo" {
     name = "podinfo"
   }
   spec {
-    type = "NodePort"
     selector = {
       app = "podinfo"
     }
