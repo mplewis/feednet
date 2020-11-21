@@ -128,9 +128,17 @@ resource "kubernetes_ingress" "podinfo" {
     name = "podinfo"
   }
   spec {
-    backend {
-      service_name = "podinfo"
-      service_port = 80
+    rule {
+      host = "podinfo.fdnt.me"
+      http {
+        path {
+          path = "/"
+          backend {
+            service_name = "podinfo"
+            service_port = 80
+          }
+        }
+      }
     }
   }
 }
