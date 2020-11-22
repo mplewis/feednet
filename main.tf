@@ -206,5 +206,9 @@ resource "kubernetes_ingress" "podinfo" {
         }
       }
     }
+    tls {
+      secret_name = "podinfo-cert"
+      hosts       = ["podinfo.fdnt.me"]
+    }
   }
 }
