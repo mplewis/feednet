@@ -128,6 +128,13 @@ resource "kubernetes_service" "podinfo" {
   }
 }
 
+resource "digitalocean_record" "podinfo" {
+  domain = "fdnt.me"
+  type   = "A"
+  name   = "podinfo"
+  value  = data.kubernetes_service.traefik.load_balancer_ingress.0.ip
+}
+
 resource "kubernetes_ingress" "podinfo" {
   metadata {
     name = "podinfo"
