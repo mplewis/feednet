@@ -79,6 +79,37 @@ resource "helm_release" "cert-manager" {
   }
 }
 
+resource "kubernetes_manifest" "clusterissuer_letsencrypt_staging" {
+  manifest = {
+    apiVersion = "cert-manager.io/v1"
+    kind       = "ClusterIssuer"
+    metadata = {
+      name = "letsencrypt-staging"
+    }
+    spec = {
+      acme = {
+        email  = "matt@mplewis.com"
+        server = "https://acme-staging-v02.api.letsencrypt.org/directory"
+        privateKeySecretRef = {
+          name = "letsencrypt-staging"
+        }
+        solvers = [
+          {
+            dns01 = {
+              digitalocean = {
+                tokenSecretRef = {
+                  name = "digitalocean-api-key"
+                  key  = "api-key"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
+
 resource "kubernetes_deployment" "podinfo" {
   metadata {
     name = "podinfo"
