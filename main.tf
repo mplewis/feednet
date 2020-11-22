@@ -62,6 +62,12 @@ resource "helm_release" "traefik" {
   values     = [file("helm/traefik.yaml")]
 }
 
+data "kubernetes_service" "traefik" {
+  metadata {
+    name = "traefik"
+  }
+}
+
 resource "kubernetes_deployment" "podinfo" {
   metadata {
     name = "podinfo"
@@ -125,9 +131,6 @@ resource "kubernetes_service" "podinfo" {
 resource "kubernetes_ingress" "podinfo" {
   metadata {
     name = "podinfo"
-    annotations = {
-      "external-dns.alpha.kubernetes.io/hostname" = "podinfo.fdnt.me"
-    }
   }
   spec {
     rule {
