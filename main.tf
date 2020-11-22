@@ -68,6 +68,17 @@ data "kubernetes_service" "traefik" {
   }
 }
 
+resource "helm_release" "cert-manager" {
+  name       = "cert-manager"
+  repository = "https://charts.jetstack.io"
+  chart      = "cert-manager"
+  version    = "v1.0.4"
+  set {
+    name  = "installCRDs"
+    value = "true"
+  }
+}
+
 resource "kubernetes_deployment" "podinfo" {
   metadata {
     name = "podinfo"
