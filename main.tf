@@ -189,6 +189,9 @@ resource "digitalocean_record" "podinfo" {
 resource "kubernetes_ingress" "podinfo" {
   metadata {
     name = "podinfo"
+    annotations = {
+      "cert-manager.io/cluster-issuer" = "letsencrypt-staging"
+    }
   }
   spec {
     rule {
