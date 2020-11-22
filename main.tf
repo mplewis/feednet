@@ -34,7 +34,7 @@ resource "digitalocean_kubernetes_cluster" "feednet" {
   }
 }
 
-provider "kubernetes" {
+provider "kubernetes-alpha" {
   load_config_file = false
   host             = digitalocean_kubernetes_cluster.feednet.endpoint
   token            = digitalocean_kubernetes_cluster.feednet.kube_config[0].token
