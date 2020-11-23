@@ -54,12 +54,6 @@ resource "helm_release" "traefik" {
   values     = [file("helm/traefik.yaml")]
 }
 
-data "kubernetes_service" "traefik" {
-  metadata {
-    name = "traefik"
-  }
-}
-
 resource "helm_release" "cert-manager" {
   name       = "cert-manager"
   repository = "https://charts.jetstack.io"
@@ -128,51 +122,11 @@ resource "kubernetes_deployment" "podinfo" {
   }
 }
 
-resource "kubernetes_service" "podinfo" {
-  metadata {
-    name = "podinfo"
-  }
-  spec {
-    selector = {
-      app = "podinfo"
-    }
-    port {
-      port        = 80
-      target_port = 9898
-    }
-  }
-}
-
-resource "digitalocean_record" "podinfo" {
-  domain = "fdnt.me"
-  type   = "A"
-  name   = "podinfo"
-  value  = data.kubernetes_service.traefik.load_balancer_ingress.0.ip
-}
-
-resource "kubernetes_ingress" "podinfo" {
-  metadata {
-    name = "podinfo"
-    annotations = {
-      "cert-manager.io/cluster-issuer" = module.letsencrypt.name
-    }
-  }
-  spec {
-    rule {
-      host = "podinfo.fdnt.me"
-      http {
-        path {
-          path = "/"
-          backend {
-            service_name = "podinfo"
-            service_port = 80
-          }
-        }
-      }
-    }
-    tls {
-      secret_name = "podinfo-cert"
-      hosts       = ["podinfo.fdnt.me"]
-    }
-  }
+module "podinfo_exposure" {
+  source           = "./exposure"
+  name             = "podinfo"
+  target_port      = 9898
+  subdomain        = "podinfo"
+  top_level_domain = "fdnt.me"
+  cluster_issuer   = module.letsencrypt.name
 }
