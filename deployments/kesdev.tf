@@ -68,6 +68,7 @@ resource "kubernetes_deployment" "kesdev" {
         container {
           name  = "s3fs"
           image = "efrecon/s3fs:latest"
+          args  = ["-o", "nonempty"]
 
           volume_mount {
             name              = "ghost-data"
