@@ -119,6 +119,38 @@ resource "kubernetes_manifest" "clusterissuer_letsencrypt_staging" {
   }
 }
 
+resource "kubernetes_manifest" "clusterissuer_letsencrypt" {
+  provider = kubernetes-alpha
+  manifest = {
+    apiVersion = "cert-manager.io/v1"
+    kind       = "ClusterIssuer"
+    metadata = {
+      name = "letsencrypt"
+    }
+    spec = {
+      acme = {
+        email  = "matt@mplewis.com"
+        server = "https://acme-v02.api.letsencrypt.org/directory"
+        privateKeySecretRef = {
+          name = "letsencrypt"
+        }
+        solvers = [
+          {
+            dns01 = {
+              digitalocean = {
+                tokenSecretRef = {
+                  name = "digitalocean-api-key"
+                  key  = "api-key"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
+
 resource "kubernetes_deployment" "podinfo" {
   metadata {
     name = "podinfo"
@@ -190,7 +222,7 @@ resource "kubernetes_ingress" "podinfo" {
   metadata {
     name = "podinfo"
     annotations = {
-      "cert-manager.io/cluster-issuer" = "letsencrypt-staging"
+      "cert-manager.io/cluster-issuer" = "letsencrypt"
     }
   }
   spec {
