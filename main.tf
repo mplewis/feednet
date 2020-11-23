@@ -34,6 +34,16 @@ resource "digitalocean_kubernetes_cluster" "feednet" {
   }
 }
 
+resource "digitalocean_kubernetes_node_pool" "bar" {
+  cluster_id = digitalocean_kubernetes_cluster.feednet.id
+  name       = "default2"
+  size       = "s-2vcpu-2gb"
+  node_count = 2
+  auto_scale = true
+  min_nodes  = 1
+  max_nodes  = 6
+}
+
 provider "kubernetes" {
   load_config_file = false
   host             = digitalocean_kubernetes_cluster.feednet.endpoint
