@@ -20,48 +20,29 @@ resource "digitalocean_container_registry" "chiba" {
   subscription_tier_slug = "starter"
 }
 
-data "digitalocean_kubernetes_versions" "versions" {}
-
-resource "digitalocean_kubernetes_cluster" "feednet" {
-  name         = "feednet"
-  region       = "sfo3"
-  version      = data.digitalocean_kubernetes_versions.versions.latest_version
-  auto_upgrade = true
-
-  node_pool {
-    name       = "default"
-    size       = "s-2vcpu-2gb"
-    auto_scale = true
-    min_nodes  = 2
-    max_nodes  = 6
-  }
+module "cluster" {
+  source = "./cluster"
 }
 
 provider "kubernetes" {
-  load_config_file = false
-  host             = digitalocean_kubernetes_cluster.feednet.endpoint
-  token            = digitalocean_kubernetes_cluster.feednet.kube_config[0].token
-  cluster_ca_certificate = base64decode(
-    digitalocean_kubernetes_cluster.feednet.kube_config[0].cluster_ca_certificate
-  )
+  load_config_file       = false
+  host                   = module.cluster.host
+  token                  = module.cluster.token
+  cluster_ca_certificate = module.cluster.cluster_ca_certificate
 }
 
 provider "kubernetes-alpha" {
-  host  = digitalocean_kubernetes_cluster.feednet.endpoint
-  token = digitalocean_kubernetes_cluster.feednet.kube_config[0].token
-  cluster_ca_certificate = base64decode(
-    digitalocean_kubernetes_cluster.feednet.kube_config[0].cluster_ca_certificate
-  )
+  host                   = module.cluster.host
+  token                  = module.cluster.token
+  cluster_ca_certificate = module.cluster.cluster_ca_certificate
 }
 
 provider "helm" {
   kubernetes {
-    load_config_file = false
-    host             = digitalocean_kubernetes_cluster.feednet.endpoint
-    token            = digitalocean_kubernetes_cluster.feednet.kube_config[0].token
-    cluster_ca_certificate = base64decode(
-      digitalocean_kubernetes_cluster.feednet.kube_config[0].cluster_ca_certificate
-    )
+    load_config_file       = false
+    host                   = module.cluster.host
+    token                  = module.cluster.token
+    cluster_ca_certificate = module.cluster.cluster_ca_certificate
   }
 }
 
