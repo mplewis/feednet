@@ -32,6 +32,14 @@ resource "digitalocean_kubernetes_cluster" "feednet" {
     min_nodes  = 3
     max_nodes  = 10
   }
+
+  node_pool {
+    name       = "default2"
+    size       = "s-2vcpu-2gb"
+    auto_scale = true
+    min_nodes  = 2
+    max_nodes  = 10
+  }
 }
 
 provider "kubernetes" {
