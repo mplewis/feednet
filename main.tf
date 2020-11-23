@@ -83,7 +83,7 @@ resource "helm_release" "metrics-server" {
   version    = "2.11.2"
   set {
     name  = "args"
-    value = ["--kubelet-insecure-tls"]
+    value = "[\"--kubelet-insecure-tls\"]"
   }
 }
 
