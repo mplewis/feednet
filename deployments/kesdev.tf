@@ -24,6 +24,11 @@ resource "kubernetes_deployment" "kesdev" {
       }
 
       spec {
+        volume {
+          name = "ghost-data"
+          empty_dir {}
+        }
+
         container {
           name    = "ghost"
           image   = "ghost:3.38.2"
