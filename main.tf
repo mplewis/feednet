@@ -70,6 +70,13 @@ resource "helm_release" "traefik" {
   values     = [file("helm/traefik.yaml")]
 }
 
+resource "helm_release" "metrics-server" {
+  name       = "metrics-server"
+  repository = "https://charts.bitnami.com/bitnami"
+  chart      = "metrics-server"
+  version    = "5.0.2"
+}
+
 data "kubernetes_service" "traefik" {
   metadata {
     name = "traefik"
