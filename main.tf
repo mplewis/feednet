@@ -78,7 +78,7 @@ data "kubernetes_service" "traefik" {
 
 resource "helm_release" "metrics-server" {
   name       = "metrics-server"
-  repository = "https://charts.helm.sh/stable"
+  repository = "https://olemarkus.github.io/metrics-server"
   chart      = "metrics-server"
   version    = "2.11.2"
 }
