@@ -71,68 +71,16 @@ resource "helm_release" "cert-manager" {
   }
 }
 
-resource "kubernetes_manifest" "clusterissuer_letsencrypt_staging" {
-  provider = kubernetes-alpha
-  manifest = {
-    apiVersion = "cert-manager.io/v1"
-    kind       = "ClusterIssuer"
-    metadata = {
-      name = "letsencrypt-staging"
-    }
-    spec = {
-      acme = {
-        email  = "matt@mplewis.com"
-        server = "https://acme-staging-v02.api.letsencrypt.org/directory"
-        privateKeySecretRef = {
-          name = "letsencrypt-staging"
-        }
-        solvers = [
-          {
-            dns01 = {
-              digitalocean = {
-                tokenSecretRef = {
-                  name = "digitalocean-api-key"
-                  key  = "api-key"
-                }
-              }
-            }
-          }
-        ]
-      }
-    }
-  }
+module "letsencrypt-staging" {
+  source = "./cluster-issuer"
+  name   = "letsencrypt-staging"
+  server = "https://acme-staging-v02.api.letsencrypt.org/directory"
 }
 
-resource "kubernetes_manifest" "clusterissuer_letsencrypt" {
-  provider = kubernetes-alpha
-  manifest = {
-    apiVersion = "cert-manager.io/v1"
-    kind       = "ClusterIssuer"
-    metadata = {
-      name = "letsencrypt"
-    }
-    spec = {
-      acme = {
-        email  = "matt@mplewis.com"
-        server = "https://acme-v02.api.letsencrypt.org/directory"
-        privateKeySecretRef = {
-          name = "letsencrypt"
-        }
-        solvers = [
-          {
-            dns01 = {
-              digitalocean = {
-                tokenSecretRef = {
-                  name = "digitalocean-api-key"
-                  key  = "api-key"
-                }
-              }
-            }
-          }
-        ]
-      }
-    }
-  }
+module "letsencrypt" {
+  source = "./cluster-issuer"
+  name   = "letsencrypt"
+  server = "https://acme-v02.api.letsencrypt.org/directory"
 }
 
 resource "kubernetes_deployment" "podinfo" {
@@ -206,7 +154,7 @@ resource "kubernetes_ingress" "podinfo" {
   metadata {
     name = "podinfo"
     annotations = {
-      "cert-manager.io/cluster-issuer" = "letsencrypt"
+      "cert-manager.io/cluster-issuer" = module.letsencrypt.name
     }
   }
   spec {
