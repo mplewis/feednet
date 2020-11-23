@@ -20,10 +20,13 @@ resource "digitalocean_container_registry" "chiba" {
   subscription_tier_slug = "starter"
 }
 
+data "digitalocean_kubernetes_versions" "versions" {}
+
 resource "digitalocean_kubernetes_cluster" "feednet" {
-  name    = "feednet"
-  region  = "sfo3"
-  version = "1.19.3-do.0"
+  name         = "feednet"
+  region       = "sfo3"
+  version      = data.digitalocean_kubernetes_versions.versions.latest_version
+  auto_upgrade = true
 
   node_pool {
     name       = "default"
