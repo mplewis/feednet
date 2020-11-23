@@ -30,9 +30,11 @@ resource "kubernetes_deployment" "kesdev" {
         }
 
         container {
-          name    = "ghost"
-          image   = "ghost:3.38.2"
-          command = ["node", "current/index.js"]
+          name  = "ghost"
+          image = "ghost:3.38.2"
+          # don't let Ghost default entrypoint clobber content/ mount,
+          # and don't let this container start before s3fs does
+          command = ["bash", "-c", "ls content/themes && node current/index.js"]
 
           env {
             name  = "url"
@@ -68,7 +70,6 @@ resource "kubernetes_deployment" "kesdev" {
         container {
           name  = "s3fs"
           image = "efrecon/s3fs:latest"
-          args  = ["-o", "nonempty"]
 
           volume_mount {
             name              = "ghost-data"
