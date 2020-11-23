@@ -76,6 +76,13 @@ data "kubernetes_service" "traefik" {
   }
 }
 
+resource "helm_release" "metrics-server" {
+  name       = "metrics-server"
+  repository = "https://charts.helm.sh/stable"
+  chart      = "metrics-server"
+  version    = "2.11.2"
+}
+
 resource "helm_release" "cert-manager" {
   name       = "cert-manager"
   repository = "https://charts.jetstack.io"
