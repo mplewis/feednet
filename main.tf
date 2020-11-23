@@ -73,11 +73,11 @@ resource "helm_release" "traefik" {
   values     = [file("helm/traefik.yaml")]
 }
 
-# data "kubernetes_service" "traefik" {
-#   metadata {
-#     name = "traefik"
-#   }
-# }
+data "kubernetes_service" "traefik" {
+  metadata {
+    name = "traefik"
+  }
+}
 
 resource "helm_release" "cert-manager" {
   name       = "cert-manager"
@@ -90,69 +90,69 @@ resource "helm_release" "cert-manager" {
   }
 }
 
-# resource "kubernetes_manifest" "clusterissuer_letsencrypt_staging" {
-#   provider = kubernetes-alpha
-#   manifest = {
-#     apiVersion = "cert-manager.io/v1"
-#     kind       = "ClusterIssuer"
-#     metadata = {
-#       name = "letsencrypt-staging"
-#     }
-#     spec = {
-#       acme = {
-#         email  = "matt@mplewis.com"
-#         server = "https://acme-staging-v02.api.letsencrypt.org/directory"
-#         privateKeySecretRef = {
-#           name = "letsencrypt-staging"
-#         }
-#         solvers = [
-#           {
-#             dns01 = {
-#               digitalocean = {
-#                 tokenSecretRef = {
-#                   name = "digitalocean-api-key"
-#                   key  = "api-key"
-#                 }
-#               }
-#             }
-#           }
-#         ]
-#       }
-#     }
-#   }
-# }
+resource "kubernetes_manifest" "clusterissuer_letsencrypt_staging" {
+  provider = kubernetes-alpha
+  manifest = {
+    apiVersion = "cert-manager.io/v1"
+    kind       = "ClusterIssuer"
+    metadata = {
+      name = "letsencrypt-staging"
+    }
+    spec = {
+      acme = {
+        email  = "matt@mplewis.com"
+        server = "https://acme-staging-v02.api.letsencrypt.org/directory"
+        privateKeySecretRef = {
+          name = "letsencrypt-staging"
+        }
+        solvers = [
+          {
+            dns01 = {
+              digitalocean = {
+                tokenSecretRef = {
+                  name = "digitalocean-api-key"
+                  key  = "api-key"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
 
-# resource "kubernetes_manifest" "clusterissuer_letsencrypt" {
-#   provider = kubernetes-alpha
-#   manifest = {
-#     apiVersion = "cert-manager.io/v1"
-#     kind       = "ClusterIssuer"
-#     metadata = {
-#       name = "letsencrypt"
-#     }
-#     spec = {
-#       acme = {
-#         email  = "matt@mplewis.com"
-#         server = "https://acme-v02.api.letsencrypt.org/directory"
-#         privateKeySecretRef = {
-#           name = "letsencrypt"
-#         }
-#         solvers = [
-#           {
-#             dns01 = {
-#               digitalocean = {
-#                 tokenSecretRef = {
-#                   name = "digitalocean-api-key"
-#                   key  = "api-key"
-#                 }
-#               }
-#             }
-#           }
-#         ]
-#       }
-#     }
-#   }
-# }
+resource "kubernetes_manifest" "clusterissuer_letsencrypt" {
+  provider = kubernetes-alpha
+  manifest = {
+    apiVersion = "cert-manager.io/v1"
+    kind       = "ClusterIssuer"
+    metadata = {
+      name = "letsencrypt"
+    }
+    spec = {
+      acme = {
+        email  = "matt@mplewis.com"
+        server = "https://acme-v02.api.letsencrypt.org/directory"
+        privateKeySecretRef = {
+          name = "letsencrypt"
+        }
+        solvers = [
+          {
+            dns01 = {
+              digitalocean = {
+                tokenSecretRef = {
+                  name = "digitalocean-api-key"
+                  key  = "api-key"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
 
 resource "kubernetes_deployment" "podinfo" {
   metadata {
@@ -214,12 +214,12 @@ resource "kubernetes_service" "podinfo" {
   }
 }
 
-# resource "digitalocean_record" "podinfo" {
-#   domain = "fdnt.me"
-#   type   = "A"
-#   name   = "podinfo"
-#   value  = data.kubernetes_service.traefik.load_balancer_ingress.0.ip
-# }
+resource "digitalocean_record" "podinfo" {
+  domain = "fdnt.me"
+  type   = "A"
+  name   = "podinfo"
+  value  = data.kubernetes_service.traefik.load_balancer_ingress.0.ip
+}
 
 resource "kubernetes_ingress" "podinfo" {
   metadata {
