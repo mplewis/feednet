@@ -89,6 +89,7 @@ module "deployments" {
 }
 
 resource "kubernetes_manifest" "mysqlcluster_kesdev" {
+  provider = kubernetes-alpha
   manifest = {
     apiVersion = "mysql.presslabs.org/v1alpha1"
     kind       = "MysqlCluster"
