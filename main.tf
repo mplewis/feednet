@@ -90,11 +90,11 @@ module "podinfo_exposure" {
   cluster_issuer   = module.letsencrypt.name
 }
 
-# module "kesdev_exposure" {
-#   source           = "./exposure"
-#   name             = "kesdev"
-#   target_port      = 2368
-#   subdomain        = "kesdev"
-#   top_level_domain = "fdnt.me"
-#   cluster_issuer   = module.letsencrypt.name
-# }
+module "kesdev_exposure" {
+  source           = "./exposure"
+  name             = "kesdev"
+  target_port      = 2368
+  subdomain        = "kesdev"
+  top_level_domain = "fdnt.me"
+  cluster_issuer   = module.letsencrypt.name
+}

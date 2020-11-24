@@ -1,3 +1,18 @@
+resource "kubernetes_persistent_volume_claim" "kesdev" {
+  metadata {
+    name = "kesdev"
+  }
+  spec {
+    storage_class_name = "do-block-storage"
+    access_modes       = ["ReadWriteOnce"]
+    resources {
+      requests = {
+        storage = "1Gi"
+      }
+    }
+  }
+}
+
 resource "kubernetes_deployment" "kesdev" {
   metadata {
     name = "kesdev"
@@ -172,21 +187,6 @@ resource "kubernetes_deployment" "kesdev" {
           }
 
         }
-      }
-    }
-  }
-}
-
-resource "kubernetes_persistent_volume_claim" "kesdev" {
-  metadata {
-    name = "kesdev"
-  }
-  spec {
-    storage_class_name = "do-block-storage"
-    access_modes       = ["ReadWriteOnce"]
-    resources {
-      requests = {
-        storage = "1Gi"
       }
     }
   }
