@@ -62,11 +62,27 @@ resource "kubernetes_deployment" "kesdev" {
           }
           env {
             name  = "database__client"
-            value = "sqlite3"
+            value = "mysql"
           }
           env {
-            name  = "database__connection__filename"
-            value = "/var/lib/ghost/content/ghost.db"
+            name  = "database__connection__host"
+            value = "127.0.0.1"
+          }
+          env {
+            name  = "database__connection__port"
+            value = "3306"
+          }
+          env {
+            name  = "database__connection__user"
+            value = "ghost"
+          }
+          env {
+            name  = "database__connection__password"
+            value = "ghost"
+          }
+          env {
+            name  = "database__connection__database"
+            value = "ghost"
           }
           env {
             name  = "mail__transport"
