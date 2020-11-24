@@ -48,6 +48,27 @@ resource "kubernetes_deployment" "kesdev" {
             name  = "database__connection__filename"
             value = "/var/lib/ghost/content/ghost.db"
           }
+          env {
+            name  = "mail__transport"
+            value = "SMTP"
+          }
+          env {
+            name  = "mail__options__service"
+            value = "Mailgun"
+          }
+          env {
+            name  = "mail__options__auth__user"
+            value = "matt@mplewis.com"
+          }
+          env {
+            name = "mail__options__auth__pass"
+            value_from {
+              secret_key_ref {
+                name = "mailgun-api-key"
+                key  = "api-key"
+              }
+            }
+          }
 
           resources {
             requests {
