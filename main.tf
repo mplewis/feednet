@@ -65,6 +65,13 @@ resource "helm_release" "cert-manager" {
   }
 }
 
+resource "helm_release" "mysql-operator" {
+  name       = "mysql-operator"
+  repository = "https://presslabs.github.io/charts"
+  chart      = "mysql-operator"
+  version    = "0.4.0"
+}
+
 module "letsencrypt-staging" {
   source = "./cluster-issuer"
   name   = "letsencrypt-staging"
