@@ -65,13 +65,6 @@ resource "helm_release" "cert-manager" {
   }
 }
 
-resource "helm_release" "mysql-operator" {
-  name       = "mysql-operator"
-  repository = "https://presslabs.github.io/charts"
-  chart      = "mysql-operator"
-  version    = "0.4.0"
-}
-
 module "letsencrypt-staging" {
   source = "./cluster-issuer"
   name   = "letsencrypt-staging"
@@ -86,21 +79,6 @@ module "letsencrypt" {
 
 module "deployments" {
   source = "./deployments"
-}
-
-resource "kubernetes_manifest" "mysqlcluster_kesdev" {
-  provider = kubernetes-alpha
-  manifest = {
-    apiVersion = "mysql.presslabs.org/v1alpha1"
-    kind       = "MysqlCluster"
-    metadata = {
-      name = "kesdev"
-    }
-    spec = {
-      replicas   = 1
-      secretName = "mysql-root-password"
-    }
-  }
 }
 
 module "podinfo_exposure" {
