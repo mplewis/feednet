@@ -88,6 +88,20 @@ module "deployments" {
   source = "./deployments"
 }
 
+resource "kubernetes_manifest" "mysqlcluster_kesdev" {
+  manifest = {
+    apiVersion = "mysql.presslabs.org/v1alpha1"
+    kind       = "MysqlCluster"
+    metadata = {
+      name = "kesdev"
+    }
+    spec = {
+      replicas   = 1
+      secretName = "mysql-root-password"
+    }
+  }
+}
+
 module "podinfo_exposure" {
   source           = "./exposure"
   name             = "podinfo"
