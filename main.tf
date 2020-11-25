@@ -19,7 +19,7 @@ resource "digitalocean_record" "inca" {
   type   = "CNAME"
   domain = "fdnt.me"
   name   = "inca"
-  value  = "mplewis.my.to"
+  value  = "mplewis.my.to."
 }
 
 resource "digitalocean_container_registry" "chiba" {
