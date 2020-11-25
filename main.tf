@@ -15,6 +15,13 @@ provider "digitalocean" {
   token = var.digitalocean_token
 }
 
+resource "digitalocean_record" "inca" {
+  type   = "CNAME"
+  domain = "fdnt.me"
+  name   = "inca"
+  value  = "mplewis.my.to"
+}
+
 resource "digitalocean_container_registry" "chiba" {
   name                   = "chiba"
   subscription_tier_slug = "starter"
