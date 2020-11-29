@@ -113,8 +113,10 @@ resource "kubernetes_cron_job" "kesdev-db-backup" {
   spec {
     schedule = "0 10 * * *"
     job_template {
+      metadata {}
       spec {
         template {
+          metadata {}
           spec {
             restart_policy = "Never"
             container {
