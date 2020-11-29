@@ -52,7 +52,7 @@ resource "kubernetes_cron_job" "mysql-backup" {
                 value = "us-west-2"
               }
               env {
-                name = "AWS_S3_ACCESS_KEY_ID"
+                name = "AWS_ACCESS_KEY_ID"
                 value_from {
                   secret_key_ref {
                     name = "aws-s3-creds"
@@ -61,7 +61,7 @@ resource "kubernetes_cron_job" "mysql-backup" {
                 }
               }
               env {
-                name = "AWS_S3_SECRET_ACCESS_KEY"
+                name = "AWS_SECRET_ACCESS_KEY"
                 value_from {
                   secret_key_ref {
                     name = "aws-s3-creds"
