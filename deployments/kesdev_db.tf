@@ -1,6 +1,6 @@
 resource "kubernetes_persistent_volume_claim" "pvc" {
   metadata {
-    name = "kesdev_db"
+    name = "kesdev-db"
   }
   spec {
     storage_class_name = "do-block-storage"
@@ -15,11 +15,11 @@ resource "kubernetes_persistent_volume_claim" "pvc" {
 
 resource "kubernetes_service" "service" {
   metadata {
-    name = "kesdev_db"
+    name = "kesdev-db"
   }
   spec {
     selector = {
-      app = "kesdev_db"
+      app = "kesdev-db"
     }
     port {
       port = 3306
@@ -29,9 +29,9 @@ resource "kubernetes_service" "service" {
 
 resource "kubernetes_deployment" "deploy" {
   metadata {
-    name = "kesdev_db"
+    name = "kesdev-db"
     labels = {
-      app = "kesdev_db"
+      app = "kesdev-db"
     }
   }
 
@@ -40,14 +40,14 @@ resource "kubernetes_deployment" "deploy" {
 
     selector {
       match_labels = {
-        app = "kesdev_db"
+        app = "kesdev-db"
       }
     }
 
     template {
       metadata {
         labels = {
-          app = "kesdev_db"
+          app = "kesdev-db"
         }
       }
 
@@ -55,7 +55,7 @@ resource "kubernetes_deployment" "deploy" {
         volume {
           name = "storage"
           persistent_volume_claim {
-            claim_name = "kesdev_db"
+            claim_name = "kesdev-db"
           }
         }
 
