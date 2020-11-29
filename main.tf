@@ -101,8 +101,8 @@ module "kesdev_exposure" {
   source           = "./exposure"
   name             = "kesdev"
   target_port      = 2368
-  subdomain        = "kesdev"
-  top_level_domain = "fdnt.me"
+  subdomain        = "@"
+  top_level_domain = "kesdev.com"
   cluster_issuer   = module.letsencrypt.name
 }
 

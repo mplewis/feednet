@@ -37,7 +37,7 @@ resource "kubernetes_deployment" "kesdev" {
 
           env {
             name  = "url"
-            value = "https://kesdev.fdnt.me"
+            value = "https://kesdev.com"
           }
           env {
             name  = "database__client"
