@@ -106,68 +106,10 @@ module "kesdev_exposure" {
   cluster_issuer   = module.letsencrypt.name
 }
 
-resource "kubernetes_cron_job" "kesdev-db-backup" {
-  metadata {
-    name = "kesdev-db-backup"
-  }
-  spec {
-    schedule = "0 10 * * *"
-    job_template {
-      metadata {}
-      spec {
-        template {
-          metadata {}
-          spec {
-            restart_policy = "Never"
-            container {
-              name  = "mysql-backup"
-              image = "databack/mysql-backup:a7f39c710fe48354a49d15f8fa575bb98f577c48"
-              env {
-                name  = "DB_DUMP_TARGET"
-                value = "s3://mplewis-db-backups/kesdev-db"
-              }
-              env {
-                name  = "DB_SERVER"
-                value = "kesdev-db"
-              }
-              env {
-                name  = "DB_USER"
-                value = "root"
-              }
-              env {
-                name  = "DB_PASS"
-                value = "superuser"
-              }
-              env {
-                name  = "RUN_ONCE"
-                value = "true"
-              }
-              env {
-                name  = "AWS_DEFAULT_REGION"
-                value = "us-west-2"
-              }
-              env {
-                name = "AWS_S3_ACCESS_KEY_ID"
-                value_from {
-                  secret_key_ref {
-                    name = "aws-s3-creds"
-                    key  = "access-key-id"
-                  }
-                }
-              }
-              env {
-                name = "AWS_S3_SECRET_ACCESS_KEY"
-                value_from {
-                  secret_key_ref {
-                    name = "aws-s3-creds"
-                    key  = "secret-access-key"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+module "kesdev_backup" {
+  source   = "./mysql-backup"
+  name     = "kesdev"
+  schedule = "* * * * *"
+  host     = "kesdev-db"
+  password = "superuser"
 }
