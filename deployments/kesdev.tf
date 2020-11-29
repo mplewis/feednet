@@ -7,7 +7,7 @@ resource "kubernetes_deployment" "kesdev" {
   }
 
   spec {
-    replicas = 2
+    replicas = 1
 
     selector {
       match_labels = {
