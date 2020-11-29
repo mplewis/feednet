@@ -47,7 +47,7 @@ resource "kubernetes_service" "service" {
 resource "digitalocean_record" "record" {
   domain = var.top_level_domain
   type   = "A"
-  name   = var.name
+  name   = var.subdomain
   value  = data.kubernetes_service.traefik.load_balancer_ingress.0.ip
 }
 
