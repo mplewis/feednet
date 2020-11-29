@@ -19,6 +19,10 @@ variable "cluster_issuer" {
   description = "The name of the Cluster Issuer to use for issuing the TLS cert"
 }
 
+locals {
+  host = var.subdomain == "@" ? var.top_level_domain : "${var.subdomain}.${var.top_level_domain}"
+}
+
 data "kubernetes_service" "traefik" {
   metadata {
     name = "traefik"
@@ -56,7 +60,7 @@ resource "kubernetes_ingress" "ingress" {
   }
   spec {
     rule {
-      host = "${var.subdomain}.${var.top_level_domain}"
+      host = local.host
       http {
         path {
           path = "/"
@@ -69,7 +73,7 @@ resource "kubernetes_ingress" "ingress" {
     }
     tls {
       secret_name = "${var.name}-cert"
-      hosts       = ["${var.subdomain}.${var.top_level_domain}"]
+      hosts       = [local.host]
     }
   }
 }
