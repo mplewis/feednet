@@ -109,7 +109,7 @@ module "kesdev_exposure" {
 module "kesdev_backup" {
   source   = "./mysql-backup"
   name     = "kesdev"
-  schedule = "* * * * *"
+  schedule = "0 10 * * *"
   host     = "kesdev-db"
   password = "superuser"
 }
