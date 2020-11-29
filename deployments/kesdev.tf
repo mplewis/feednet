@@ -45,7 +45,7 @@ resource "kubernetes_deployment" "kesdev" {
           }
           env {
             name  = "database__connection__host"
-            value = "kesdev_db"
+            value = "kesdev-db"
           }
           env {
             name  = "database__connection__port"
