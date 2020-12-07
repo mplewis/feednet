@@ -24,17 +24,15 @@ resource "kubernetes_deployment" "pokemon-emerald" {
 
       spec {
         volume {
-          name = "roms"
-          empty_dir {}
-        }
-        volume {
-          name = "saves"
+          name = "content"
           empty_dir {}
         }
 
         container {
-          name  = "cuttlegame"
-          image = "cuttlegame:1.0.0"
+          name    = "cuttlegame"
+          image   = "mplewis/cuttlegame:1.0.0"
+          command = ["bash", "-c"]
+          args    = ["ls /content/roms && ln -s /content/roms /roms && ln -s /content/saves /saves && start.sh"]
 
           env {
             name  = "CORE"
@@ -55,13 +53,8 @@ resource "kubernetes_deployment" "pokemon-emerald" {
           }
 
           volume_mount {
-            name              = "roms"
-            mount_path        = "/roms"
-            mount_propagation = "HostToContainer"
-          }
-          volume_mount {
-            name              = "saves"
-            mount_path        = "/saves"
+            name              = "content"
+            mount_path        = "/content"
             mount_propagation = "HostToContainer"
           }
 
@@ -82,20 +75,14 @@ resource "kubernetes_deployment" "pokemon-emerald" {
           image = "efrecon/s3fs:latest"
 
           volume_mount {
-            name              = "roms"
-            mount_path        = "/opt/s3fs/bucket/roms"
-            mount_propagation = "Bidirectional"
-          }
-
-          volume_mount {
-            name              = "saves"
-            mount_path        = "/opt/s3fs/bucket/saves"
+            name              = "content"
+            mount_path        = "/opt/s3fs/bucket"
             mount_propagation = "Bidirectional"
           }
 
           env {
             name  = "AWS_S3_BUCKET"
-            value = "cuttlegame"
+            value = "cuttlegames"
           }
           env {
             name = "AWS_S3_ACCESS_KEY_ID"
