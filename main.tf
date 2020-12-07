@@ -118,7 +118,7 @@ module "pokemon_emerald_exposure" {
   source           = "./exposure"
   name             = "pokemon-emerald"
   target_port      = 80
-  subdomain        = "pokemon"
-  top_level_domain = "kesdev.com"
+  subdomain        = "emerald"
+  top_level_domain = "fdnt.me"
   cluster_issuer   = module.letsencrypt.name
 }
