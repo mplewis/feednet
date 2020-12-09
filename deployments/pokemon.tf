@@ -27,12 +27,16 @@ resource "kubernetes_deployment" "pokemon-emerald" {
           name = "content"
           empty_dir {}
         }
+        volume {
+          name = "config"
+          config_map {
+            name = "pokemon-emerald"
+          }
+        }
 
         container {
-          name    = "cuttlegame"
-          image   = "mplewis/cuttlegame:1.1.0"
-          command = ["bash", "-c"]
-          args    = ["ls /content/roms && ln -s /content/roms /roms && ln -s /content/saves /saves"]
+          name  = "cuttlegame"
+          image = "mplewis/cuttlegame:1.2.0"
 
           env {
             name  = "CORE"
@@ -40,7 +44,11 @@ resource "kubernetes_deployment" "pokemon-emerald" {
           }
           env {
             name  = "ROM"
-            value = "pokemon_emerald.gba"
+            value = "/content/roms/pokemon_emerald.gba"
+          }
+          env {
+            name  = "CONFIG"
+            value = "/config/retroarch.cfg"
           }
           env {
             name = "PASSWORD"
@@ -56,6 +64,10 @@ resource "kubernetes_deployment" "pokemon-emerald" {
             name              = "content"
             mount_path        = "/content"
             mount_propagation = "HostToContainer"
+          }
+          volume_mount {
+            name       = "config"
+            mount_path = "/config"
           }
 
           resources {
@@ -123,5 +135,14 @@ resource "kubernetes_deployment" "pokemon-emerald" {
         }
       }
     }
+  }
+}
+
+resource "kubernetes_config_map" "example" {
+  metadata {
+    name = "pokemon-emerald"
+  }
+  data = {
+    "retroarch.cfg" = "savefile_directory = /content/saves\nsavestate_directory = /content/saves"
   }
 }
