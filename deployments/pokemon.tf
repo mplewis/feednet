@@ -72,7 +72,7 @@ resource "kubernetes_deployment" "pokemon-emerald" {
 
           resources {
             requests {
-              cpu    = "30m"
+              cpu    = "300m"
               memory = "128Mi"
             }
             limits {
