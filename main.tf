@@ -88,15 +88,6 @@ module "deployments" {
   source = "./deployments"
 }
 
-module "podinfo_exposure" {
-  source           = "./exposure"
-  name             = "podinfo"
-  target_port      = 9898
-  subdomain        = "podinfo"
-  top_level_domain = "fdnt.me"
-  cluster_issuer   = module.letsencrypt.name
-}
-
 module "kesdev_exposure" {
   source           = "./exposure"
   name             = "kesdev"
