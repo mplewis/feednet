@@ -32,7 +32,7 @@ resource "kubernetes_deployment" "pokemon-emerald" {
           name    = "cuttlegame"
           image   = "mplewis/cuttlegame:1.1.0"
           command = ["bash", "-c"]
-          args    = ["ls /content/roms && ln -s /content/roms /roms && ln -s /content/saves /saves && start.sh"]
+          args    = ["ls /content/roms && ln -s /content/roms /roms && ln -s /content/saves /saves"]
 
           env {
             name  = "CORE"
