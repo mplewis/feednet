@@ -36,7 +36,7 @@ resource "kubernetes_deployment" "pokemon-emerald" {
 
         container {
           name  = "cuttlegame"
-          image = "mplewis/cuttlegame:1.2.0"
+          image = "mplewis/cuttlegame:1.2.1"
 
           env {
             name  = "CORE"
