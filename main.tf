@@ -46,7 +46,6 @@ provider "kubernetes-alpha" {
 
 provider "helm" {
   kubernetes {
-    load_config_file       = false
     host                   = module.cluster.host
     token                  = module.cluster.token
     cluster_ca_certificate = module.cluster.cluster_ca_certificate

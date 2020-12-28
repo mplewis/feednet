@@ -1,0 +1,84 @@
+templates:
+  ferris: |
+    $MSG
+    ------------------------
+      \
+       \
+         _~^~^~_
+     \) /  o o  \ (/
+       '_   -   _'
+       / '-----' \
+  gopher: |
+    $MSG
+    ------------------------
+      \
+       \    ,_---~~~~~----._
+      _,,_,*^____      _____``*g*\"*,
+    / __/ /'     ^.  /      \ ^@q   f
+    [  @f | @))    |  | @))   l  0 _/
+    \`/   \~____ / __ \_____/    \
+      |           _l__l_           I
+      }          [______]           I
+      ]            | | |            |
+      ]             ~ ~             |
+      |                            |
+       |                           |
+
+bots:
+  retf:
+    - riir
+    - ferrisay
+    - retf
+    - rustannoy
+  gopher:
+    - gosay
+    - gotime
+
+responders:
+  riir:
+    match: "^!riir$"
+    template: ferris
+    responses:
+      - REWRITE IT IN RUST
+  ferrisay:
+    match: "^!retf (.+)$"
+    template: ferris
+  retf:
+    match: "^!retf$"
+    template: ferris
+    responses:
+      - Have you tried rewriting it in Rust?
+      - You sure that doesn't have a memory leak?
+      - Rust is the best language and C is the worst
+      - ">implying garbage collectors are even real"
+      - Rust Evangelism Task Force v0.0.1
+      - Valgrind? No thanks, I don't do drugs
+      - Imagine not ensuring memory safety at compile time.
+      - bro, you just coded cringe. you are going to leak pointer
+  rustannoy:
+    probability: 0.1
+    match: rust
+    responses:
+      - Did someone say Rust?
+      - Rust is the best language
+      - Psst. Rewrite it in Rust.
+      - Sounds like someone wants to rewrite it in Rust.
+      - Rust is great for all use cases!
+      - There is literally nothing that Rust is bad at
+      - Rewrite your company's core codebase in Rust
+      - Rust comes with Cargo, a great package manager
+      - I love Rust.
+      - Who doesn't love Rust?
+      - If you don't love Rust I will fight you
+      - Have you programmed in Rust today?
+      - Rust's compile-time memory safety is second to none.
+      - Rust is the best and C is the worst
+      - Imagine programming in Java when you could be writing Rust
+  gosay:
+    match: "^!gotime (.+)$"
+    template: gopher
+  gotime:
+    match: "^!gotime$"
+    template: gopher
+    responses:
+      - It's Go time!
