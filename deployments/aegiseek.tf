@@ -25,7 +25,7 @@ resource "kubernetes_deployment" "aegiseek" {
       spec {
         container {
           name  = "aegiseek"
-          image = "mplewis/aegiseek:1.0.0"
+          image = "mplewis/aegiseek:1.0.1"
           env {
             name = "AUTH_TOKEN"
             value_from {
