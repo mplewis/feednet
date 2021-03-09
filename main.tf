@@ -22,11 +22,6 @@ resource "digitalocean_record" "inca" {
   value  = "mplewis.my.to."
 }
 
-resource "digitalocean_container_registry" "chiba" {
-  name                   = "chiba"
-  subscription_tier_slug = "starter"
-}
-
 module "cluster" {
   source = "./cluster"
 }
